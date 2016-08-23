@@ -1,5 +1,7 @@
 package project.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Property {
@@ -8,11 +10,25 @@ public class Property {
 	protected String name;
 	protected String type;
 	protected String id;
+	protected List<GraphNode> parentNodes = new ArrayList<GraphNode>();
 
 	public Property(String name, String type){
 		this.name = name;
 		this.type = type;
 		id = "property: " + Integer.toString(nextId.incrementAndGet());
+	}
+	
+	public Property(String name, String type, GraphNode parentNode){
+		this(name,type);
+		this.parentNodes.add(parentNode);
+	}
+
+	public List<GraphNode> getParentNodes() {
+		return parentNodes;
+	}
+
+	public void setParentNode(GraphNode parentNode) {
+		this.parentNodes.add(parentNode);
 	}
 
 	public String getName() {
