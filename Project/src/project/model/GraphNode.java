@@ -49,6 +49,10 @@ public class GraphNode {
 	public void setNodeProperties(List<Property> nodeProperties) {
 		this.nodeProperties = nodeProperties;
 	}
+	
+	public void addNodeProperty(Property property){
+		this.nodeProperties.add(property);
+	}
 
 	public List<GraphNode> getChildNodes() {
 		return childNodes;
@@ -58,5 +62,12 @@ public class GraphNode {
 		this.childNodes = childNodes;
 	}
 	
+	public void addChildNode(GraphNode childNode){
+		if(!childNodes.contains(childNode)){
+			childNodes.add(childNode);
+		}else{
+			System.out.println("Already added");
+		}
+	}
 	
 }

@@ -24,6 +24,7 @@ import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
 import project.providers.ContentProvider;
+import project.providers.MyContentProvider;
 import project.providers.MyLabelProvider;
 import project.test.TestDataProvider;
 
@@ -107,10 +108,10 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		viewer.getGraphControl().setLayoutData(gridData);
 		
 		
-		//viewer.setContentProvider(new ContentProvider());
+		viewer.setContentProvider(new MyContentProvider());
 		viewer.setLabelProvider(new MyLabelProvider());
 		TestDataProvider tdp = new TestDataProvider();
-		//viewer.setInput(tdp.getNodes());
+		viewer.setInput(tdp.getNodes());
 		viewer.setLayoutAlgorithm(new RadialLayoutAlgorithm());
 		viewer.applyLayout();
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {

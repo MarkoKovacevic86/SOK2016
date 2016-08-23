@@ -28,7 +28,7 @@ public class MainWindow{
 	
 	public MainWindow(){
 		Display display = new Display();
-		Shell shell = new Shell(display,SWT.BORDER);
+		Shell shell = new Shell(display,SWT.SHELL_TRIM);
 		MainView mv = new MainView();
 		mv.createPartControl(shell);
 		shell.open();
