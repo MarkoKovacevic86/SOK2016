@@ -10,7 +10,7 @@ import project.model.Graph;
 import project.model.GraphNode;
 import project.model.ModelRoot;
 
-public class ContentProvider implements ITreeContentProvider{
+public class MyTreeContentProvider implements ITreeContentProvider{
 	
 	private ModelRoot model;
 

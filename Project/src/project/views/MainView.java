@@ -23,7 +23,6 @@ import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
-import project.providers.ContentProvider;
 import project.providers.MyContentProvider;
 import project.providers.MyLabelProvider;
 import project.test.TestDataProvider;
@@ -90,7 +89,7 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	}
 	
 	private GridData initialiseGridData(){
-		GridData gridData = new GridData();
+		GridData gridData = new GridData(); 
 		gridData.verticalAlignment = GridData.FILL;
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessHorizontalSpace = true;

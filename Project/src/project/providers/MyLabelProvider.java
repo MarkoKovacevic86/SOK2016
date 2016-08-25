@@ -16,9 +16,9 @@ import project.model.Property;
 
 public class MyLabelProvider extends LabelProvider {
 	
-	private static final Image GRAPH = null;
-	private static final Image PAGE = null;
-	private static final Image ATTRIBUTE = null;
+	private static final Image GRAPH = getImage("GRAPH.gif");
+	private static final Image PAGE = getImage("PAGE.gif");
+	private static final Image ATTRIBUTE = getImage("ATTRIBUTE.gif");
 	
 	public Image getImage(Object element){
 		if(element instanceof Graph){

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Project
-Bundle-SymbolicName: Project
+Bundle-SymbolicName: Project;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: project.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

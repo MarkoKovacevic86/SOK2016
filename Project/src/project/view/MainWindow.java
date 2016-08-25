@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import project.views.MainView;
+import project.views.TreeView;
 
 
 
@@ -31,6 +32,8 @@ public class MainWindow{
 		Shell shell = new Shell(display,SWT.SHELL_TRIM);
 		MainView mv = new MainView();
 		mv.createPartControl(shell);
+		/*TreeView tv = new TreeView();
+		tv.createPartControl(shell);*/
 		shell.open();
 		
 		while(!shell.isDisposed()){

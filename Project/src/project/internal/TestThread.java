@@ -10,7 +10,7 @@ public class TestThread extends Thread {
 			try{
 				MainWindow mw = new MainWindow();
 			}catch(Exception e){
-				System.out.println("Test thread interupted");
+				e.printStackTrace();
 			}
 		}
 	}
