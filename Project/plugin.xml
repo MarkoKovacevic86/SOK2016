@@ -2,5 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="project.viewer" name="Project Viewer" schema="schema/project.viewer.exsd"/>
+   <extension-point id="project.source" name="Project source" schema="schema/project.source.exsd"/>
 
 </plugin>
