@@ -3,5 +3,49 @@
 <plugin>
    <extension-point id="project.viewer" name="Project Viewer" schema="schema/project.viewer.exsd"/>
    <extension-point id="project.source" name="Project source" schema="schema/project.source.exsd"/>
+   <extension
+         id="id1"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.products">
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="project.internal.Perspective"
+            id="project.perspective"
+            name="Perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="project.perspective">
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="Project.handler1">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="project.views.MainView"
+            id="project.views.mainview"
+            name="Main View"
+            restorable="true">
+      </view>
+   </extension>
 
 </plugin>
