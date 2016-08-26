@@ -4,7 +4,7 @@
    <extension-point id="project.viewer" name="Project Viewer" schema="schema/project.viewer.exsd"/>
    <extension-point id="project.source" name="Project source" schema="schema/project.source.exsd"/>
    <extension
-         id="id1"
+         id="application"
          point="org.eclipse.core.runtime.applications">
       <application
             cardinality="singleton-global"
@@ -27,6 +27,14 @@
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
             targetID="project.perspective">
+            <view
+            	id = "project.mainview"
+            	minimized = "false"
+            	relationship = "right"
+            	ratio = "0.2"
+            	relative = "project.views.mainview" 
+            	>
+            </view>
       </perspectiveExtension>
    </extension>
    <extension
