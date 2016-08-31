@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Users/igot/.eclipse/org.eclipse.platform_4.5.2_1709980481_win32_win32_x86_64/plugins/org.eclipse.zest.core_1.5.201.201508170204.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

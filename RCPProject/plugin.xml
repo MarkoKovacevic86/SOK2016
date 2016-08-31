@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="rcpproject.source" name="Source" schema="schema/rcpproject.source.exsd"/>
+   <extension-point id="rcpproject.viewer" name="Viewer" schema="schema/rcpproject.viewer.exsd"/>
+
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="RCPProject.application"
+            name="RCPProject">
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/RCPProject/css/default.css">
+         </property>
+         <property
+               name="appName"
+               value="RCPProject">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="rcpproject.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="rcpproject.views.MainView"
+            id="rcpproject.views.mainview"
+            name="MainView"
+            restorable="true">
+      </view>
+      <view
+            class="rcpproject.views.BirdView"
+            id="rcpproject.views.birdview"
+            name="Bird View"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="rcpproject.Perspective"
+            id="rcpproject.perspective"
+            name="Perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="rcpproject.perspective">
+         <view
+               id="rcpproject.views.mainview"
+               minimized="false"
+               ratio="0.7"
+               relationship="right"
+               relative="rcpproject.views.mainview">
+         </view>
+         <view
+               id="rcpproject.views.birdview"
+               minimized="false"
+               ratio="0.3"
+               relationship="left"
+               relative="rcpproject.views.birdview">
+         </view>
+      </perspectiveExtension>
+   </extension>
+
+</plugin>
