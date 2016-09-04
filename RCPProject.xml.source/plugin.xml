@@ -3,6 +3,12 @@
 <plugin>
    <extension
          point="rcpproject.source">
+         <source
+         	class = "rcpproject.xml.source.XMLSource"
+         	id = "rcpproject.xml.source"
+         	name = "XML Source">
+         </source>
    </extension>
+   
 
 </plugin>
