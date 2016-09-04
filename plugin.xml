@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="rcpproject.viewer">
+         <viewer
+         	class = "rcpproject.viewer.BlockViewer"
+         	id = "rcpproject.viewer.block.viewer"
+         	name = "rcpproject.viewer.block.viewer"
+         	>
+         </viewer>
+   </extension>
+
+</plugin>
