@@ -1,8 +1,8 @@
 package rcpproject.view;
 
-import org.eclipse.draw2d.GridData;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -18,7 +18,7 @@ public class SelectionDialog extends Dialog {
 	private Combo sourceCombos;
 	private String sourceName;
 	
-	protected SelectionDialog(Shell parentShell) {
+	public SelectionDialog(Shell parentShell) {
 		super(parentShell);
 		// TODO Auto-generated constructor stub
 	}
@@ -37,7 +37,7 @@ public class SelectionDialog extends Dialog {
 		c.setLayout(lay);
 		Label l = new Label(c, SWT.NONE);
 		l.setText("Source: ");
-		l.setLayoutData(new GridData(GridData.BEGINNING,GridData.CENTER,false,false));
+		l.setLayoutData(new GridData(GridData.BEGINNING, GridData.BEGINNING, false, false));
 		sourceCombos = new Combo(c, SWT.NONE);
 		for(SourceDescription sd : SourceManager.getInstance().getSources()){
 			sourceCombos.add(sd.getName());

@@ -1,5 +1,7 @@
 package rcpproject.views;
 
+import javax.xml.ws.Dispatch;
+
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -8,10 +10,13 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
@@ -29,6 +34,7 @@ import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 import rcpproject.providers.MyContentProvider;
 import rcpproject.providers.MyLabelProvider;
 import rcpproject.test.TestDataProvider;
+import rcpproject.view.SelectionDialog;
 
 public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	
@@ -95,7 +101,23 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 				System.out.println("hej");
 			}
 		});
-		
+		searchButton = new Button(parent, SWT.NONE);
+		searchButton.setText("Brows");
+		searchButton.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				SelectionDialog sd = new SelectionDialog(Display.getCurrent().getActiveShell());
+				sd.open();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		GridData gridData = initialiseGridData();
 		initialiseViewer(parent,gridData);
 		
