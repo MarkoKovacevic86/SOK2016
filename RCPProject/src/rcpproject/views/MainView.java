@@ -1,5 +1,6 @@
 package rcpproject.views;
 
+import javax.swing.plaf.FontUIResource;
 import javax.xml.ws.Dispatch;
 
 import org.eclipse.draw2d.Viewport;
@@ -33,6 +34,8 @@ import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
 import rcpproject.providers.MyContentProvider;
 import rcpproject.providers.MyLabelProvider;
+import rcpproject.source.SourceDescription;
+import rcpproject.source.SourceManager;
 import rcpproject.test.TestDataProvider;
 import rcpproject.view.SelectionDialog;
 
@@ -108,8 +111,12 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
+				for(SourceDescription d : SourceManager.getInstance().getSources()){
+					System.out.println(d.getId() + "JEEE");
+				}
 				SelectionDialog sd = new SelectionDialog(Display.getCurrent().getActiveShell());
 				sd.open();
+
 			}
 			
 			@Override
