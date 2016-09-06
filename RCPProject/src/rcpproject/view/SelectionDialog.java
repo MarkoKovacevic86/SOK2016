@@ -50,6 +50,7 @@ public class SelectionDialog extends Dialog {
 	protected void okPressed() {
 		// TODO Auto-generated method stub
 		sourceName = sourceCombos.getText();
+		
 		super.okPressed();
 	}
 

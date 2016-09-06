@@ -6,6 +6,7 @@ import javax.xml.ws.Dispatch;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -20,9 +21,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.zest.core.viewers.AbstractZoomableViewer;
 import org.eclipse.zest.core.viewers.GraphViewer;
+import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 import org.eclipse.zest.core.viewers.IZoomableWorkbenchPart;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
@@ -111,9 +115,6 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				for(SourceDescription d : SourceManager.getInstance().getSources()){
-					System.out.println(d.getId() + "JEEE");
-				}
 				SelectionDialog sd = new SelectionDialog(Display.getCurrent().getActiveShell());
 				sd.open();
 
@@ -200,6 +201,26 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	public AbstractZoomableViewer getZoomableViewer() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void setContentProvider(IGraphEntityContentProvider provider){
+		viewer.setContentProvider(provider);
+	}
+	
+	public void setLableProvider(LabelProvider provider){
+		viewer.setLabelProvider(provider);
+		viewer.getGraphControl().applyLayout();
+	}
+	
+	public void setInput(Object o){
+		if(o instanceof Graph){
+			graphOnView = (Graph)o;
+		}
+		viewer.setInput(o);
+		viewer.refresh();
+		viewer.getGraphControl().applyLayout();
+		viewer.refresh();
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
 
 }
