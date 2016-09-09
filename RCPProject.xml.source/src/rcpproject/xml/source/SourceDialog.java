@@ -95,7 +95,12 @@ public class SourceDialog extends Dialog{
 			MessageDialog.openError(getShell(), "Warning", "Blank location field");
 			return;
 		}
+		location = locationText.getText();
 		super.okPressed();
+	}
+
+	public String getLocation() {
+		return location;
 	}
 	
 	

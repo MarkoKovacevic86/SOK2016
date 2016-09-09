@@ -19,6 +19,7 @@ public class RootDoc extends Graph {
 
 	public RootDoc(String location) {
 		super(location);
+		System.out.println(location);
 		File file = new File(location);
 		Document doc = null;
 		DocumentBuilder docBuilder = null;
@@ -34,6 +35,7 @@ public class RootDoc extends Graph {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		parseXML(doc);
 	}
 	
 	private void getNode(NodeList nodeList, Element parrent){

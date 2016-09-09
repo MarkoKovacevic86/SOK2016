@@ -150,11 +150,11 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		viewer.getGraphControl().setLayoutData(gridData);
 		
 		
-		viewer.setContentProvider(new MyContentProvider());
+	/*	viewer.setContentProvider(new MyContentProvider());
 		viewer.setLabelProvider(new MyLabelProvider());
 		TestDataProvider tdp = new TestDataProvider();
-		viewer.setInput(tdp.getNodes());
-		viewer.refresh();
+	//	viewer.setInput(tdp.getNodes());
+		viewer.refresh();*/
 		viewer.setLayoutAlgorithm(new RadialLayoutAlgorithm());
 		viewer.applyLayout();
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -221,6 +221,11 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		viewer.getGraphControl().applyLayout();
 		viewer.refresh();
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	}
+
+
+	public GraphViewer getViewer() {
+		return viewer;
 	}
 
 }

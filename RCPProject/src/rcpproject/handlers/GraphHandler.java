@@ -25,7 +25,7 @@ public class GraphHandler extends AbstractHandler {
 	IWorkbenchWindow window;
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		window = HandlerUtil.getActiveWorkbenchWindow(event);
+		window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		SelectionDialog sd = new SelectionDialog(window.getShell());
 		int response = sd.open();
 		if(response == Window.OK){
@@ -36,12 +36,20 @@ public class GraphHandler extends AbstractHandler {
 				window.getActivePage();
 				IViewPart view = window.getActivePage().findView("rcpproject.views.mainview");
 				if(graph != null && !root.getLoadedGraphs().containsKey(graph.getLocation())){
+					System.out.println("test jedan");
 					IViewer viewer = getViewerFromViewerDesc("rcpproject.viewer");
 					if(viewer != null && view != null){
+						System.out.println("test dva");
+						System.out.println(graph.getNumberOfNodes());
 						MainView mv = (MainView)view;
 						mv.setContentProvider(viewer.getContentProvider());
 						mv.setLableProvider(viewer.getLabelProvider());
 						mv.setInput(graph);
+						mv.getViewer().refresh();
+					/*	MainView mv2 = new MainView();
+						mv2.setContentProvider(viewer.getContentProvider());
+						mv2.setLableProvider(viewer.getLabelProvider());
+						mv2.setInput(graph);*/
 						
 					}
 					root.addGraph(graph);
@@ -56,7 +64,7 @@ public class GraphHandler extends AbstractHandler {
 	
 	public ISource getGraphFromSourceDesc(String id){
 		for(SourceDescription desc : SourceManager.getInstance().getSources()){
-			if(id.equals(desc.getId())){
+			if(id.equals(desc.getName())){
 				return SourceManager.getInstance().createSource(desc.getId());
 			}
 		}return null;

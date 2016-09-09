@@ -5,7 +5,7 @@
          point="rcpproject.viewer">
          <viewer
          	class = "rcpproject.viewer.BlockViewer"
-         	id = "rcpproject.viewer.block.viewer"
+         	id = "rcpproject.viewer"
          	name = "rcpproject.viewer.block.viewer"
          	>
          </viewer>
