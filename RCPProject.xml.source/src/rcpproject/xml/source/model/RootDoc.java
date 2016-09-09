@@ -48,6 +48,7 @@ public class RootDoc extends Graph {
 					parrent.getChildNodes().add(element);
 				}
 				if(tNode.hasAttributes()){
+					System.out.println("it has attributes");
 					NamedNodeMap mapOfNodes = tNode.getAttributes();
 					for(int i = 0; i < mapOfNodes.getLength();i++){
 						Node node = mapOfNodes.item(i);

@@ -1,14 +1,9 @@
 package rcpproject.views;
 
-import javax.swing.plaf.FontUIResource;
-import javax.xml.ws.Dispatch;
-
 import org.eclipse.draw2d.Viewport;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -36,11 +31,6 @@ import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
-import rcpproject.providers.MyContentProvider;
-import rcpproject.providers.MyLabelProvider;
-import rcpproject.source.SourceDescription;
-import rcpproject.source.SourceManager;
-import rcpproject.test.TestDataProvider;
 import rcpproject.view.SelectionDialog;
 
 public class MainView extends ViewPart implements IZoomableWorkbenchPart{

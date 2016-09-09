@@ -14,11 +14,7 @@ public class MyContentProvider extends ArrayContentProvider implements IGraphEnt
 		if(entity instanceof GraphNode){
 			GraphNode gnode = (GraphNode)entity;
 			return gnode.getChildNodes().toArray();
-		}else if(entity instanceof Property){
-			Property prop = (Property)entity;
-			return prop.getParentNodes().toArray();
-		}
-		return null;
+		}return null;
 	}
 
 }

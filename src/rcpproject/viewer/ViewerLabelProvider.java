@@ -33,7 +33,9 @@ public class ViewerLabelProvider extends LabelProvider implements IFigureProvide
 	@Override
 	public IFigure getFigure(Object arg0) {
 		if(arg0 instanceof GraphNode){
-			
+			IFigure figure = new BlockFigure((GraphNode)arg0);
+			((BlockFigure)figure).setSize(-1,-1);
+			return figure;
 		}
 		return null;
 	}

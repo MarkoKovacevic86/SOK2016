@@ -52,7 +52,6 @@ public class GraphNode {
 	
 	public void addNodeProperty(Property property){
 		this.nodeProperties.add(property);
-		property.setParentNode(this);
 	}
 
 	public List<GraphNode> getChildNodes() {
