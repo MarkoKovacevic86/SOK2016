@@ -10,12 +10,14 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 public class ClassParser {
 	
 	private CompilationUnit cu;
+	private MyVisitor visitor;
 	private String filePath;
 	
 	
@@ -29,31 +31,11 @@ public class ClassParser {
 		parser.setSource(readFileToString(filePath).toCharArray());
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		cu = (CompilationUnit) parser.createAST(null);
-		cu.accept(createVisitor());
+		visitor = new MyVisitor();
+		cu.accept(visitor);
 	}
 	
-	private ASTVisitor createVisitor(){
-		ASTVisitor visitor = new ASTVisitor() {
-			Set names = new HashSet();
-			
-			public boolean visit(VariableDeclarationFragment node){
-				SimpleName name = node.getName();
-				this.names.add(name.getIdentifier());
-				System.out.println("Declaration of '" + name + "' at line"
-						+ cu.getLineNumber(name.getStartPosition()));
-				return false;
-			}
-			
-			public boolean visit(SimpleName node){
-				if (this.names.contains(node.getIdentifier())) {
-					System.out.println("Usage of '" + node + "' at line "
-							+ cu.getLineNumber(node.getStartPosition()));
-				}return true;
-			}
-		};
-		
-		return visitor;
-	}
+	
 	
 	private static String readFileToString(String filePath) throws IOException{
 		StringBuilder fileData = new StringBuilder(1000);
@@ -66,6 +48,12 @@ public class ClassParser {
 			buf = new char[1024];
 		}reader.close();
 		return fileData.toString();
+	}
+	
+	public void readMethods(){
+		for(MethodDeclaration md : visitor.getMethods()){
+			System.out.println("METHOD: " + md.getName());
+		}
 	}
 
 	public void setFilePath(String filePath) {

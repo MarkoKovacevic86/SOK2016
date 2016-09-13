@@ -62,7 +62,7 @@ public class SourceDialog extends Dialog{
 					FileDialog fd = new FileDialog(composite.getShell(), SWT.OPEN);
 					fd.setText("Open");
 					fd.setFilterPath("C:/");
-					String[] extensions = {"*.xml", "*.xsd"};
+					String[] extensions = {"*.java"};
 					fd.setFilterExtensions(extensions);
 					String path = fd.open();
 					if(path != null){

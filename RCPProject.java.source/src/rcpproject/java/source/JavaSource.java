@@ -1,5 +1,7 @@
 package rcpproject.java.source;
 
+import java.io.IOException;
+
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IWorkbenchWindow;
 
@@ -18,7 +20,13 @@ public class JavaSource implements ISource {
 		int response = dlg.open();
 		if(response == Window.OK){
 			location = dlg.getLocation();
-			JClass jclass = new JClass(location);
+			JClass jclass = null;
+			try {
+				jclass = new JClass(location);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return jclass;
 			
 		}

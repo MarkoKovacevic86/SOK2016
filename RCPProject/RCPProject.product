@@ -17,6 +17,7 @@
 
    <plugins>
       <plugin id="RCPProject"/>
+      <plugin id="RCPProject.java.source"/>
       <plugin id="RCPProject.xml.source"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="javax.annotation"/>

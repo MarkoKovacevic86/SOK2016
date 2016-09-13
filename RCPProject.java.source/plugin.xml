@@ -3,6 +3,11 @@
 <plugin>
    <extension
          point="rcpproject.source">
+         <source 
+         class = "rcpproject.java.source.JavaSource"
+         id = "rcpproject.java.source"
+         name = "JAVA Source">
+         </source>
    </extension>
 
 </plugin>
