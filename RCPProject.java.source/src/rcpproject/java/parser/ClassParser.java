@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.collections.bag.SynchronizedBag;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -33,6 +34,7 @@ public class ClassParser {
 		cu = (CompilationUnit) parser.createAST(null);
 		visitor = new MyVisitor();
 		cu.accept(visitor);
+		parseOutClass(cu.toString());
 	}
 	
 	
@@ -55,9 +57,25 @@ public class ClassParser {
 			System.out.println("METHOD: " + md.getName());
 		}
 	}
+	
+	public void readNames(){
+		for(SimpleName name : visitor.getNames()){
+			System.out.println("NAME : " + name.getIdentifier());
+		}
+	}
+	
+	public void readClassName(){
+		
+	}
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+	
+	private void parseOutClass(String text){
+		String[] parsedText = text.split("\\{");
+		parsedText = parsedText[0].split("class");
+		System.out.println(parsedText[1].trim());
 	}
 	
 }

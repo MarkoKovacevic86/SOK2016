@@ -10,7 +10,8 @@ public class JClass extends Graph{
 	public JClass(String location) throws IOException {
 		super(location);
 		ClassParser cparser = new ClassParser(location);
-		cparser.readMethods();
+		/*cparser.readMethods();
+		cparser.readNames();*/
 		// TODO Auto-generated constructor stub
 	}
 	
