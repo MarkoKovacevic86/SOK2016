@@ -23,20 +23,20 @@ public class BlockFigure extends RectangleFigure implements ILabeledFigure, ISty
 		super();
 		border.setLabel(node.getName());
 		this.setBorder(border);
-		GridLayout layout = new GridLayout(2, true);
+		GridLayout layout = new GridLayout(2, false);
 		setLayoutManager(layout);
+		setPreferredSize(100,100);
 		Label name;
 		Label value;
 		Font f = new Font(null, "Arial", 7, SWT.NORMAL);
 		if(node.getNodeProperties().size() != 0){
 			for(Property p : node.getNodeProperties()){
-			
-				name = new Label(p.getType() + " >> ");
+				name = new Label(p.getType() + " >> " + p.getName());
 				value = new Label(p.getName() );
 				name.setFont(f);
 				value.setFont(f);
 				add(name);
-				add(value);
+				//add(value);
 			}
 		}else{
 			name = new Label(" ");
@@ -46,6 +46,7 @@ public class BlockFigure extends RectangleFigure implements ILabeledFigure, ISty
 			add(name);
 			add(value);
 		}
+		adjustSize();
 		
 	}
 	

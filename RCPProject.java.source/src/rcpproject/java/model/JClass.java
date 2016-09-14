@@ -29,11 +29,10 @@ public class JClass extends Graph{
 		for(MethodDeclaration md : cparser.getMethods()){
 			if(md.getName().toString().equals(className)){
 				method = new JMethod(md.getName().toString(), "method");
-				System.out.println("test one");
 				for(MethodDeclaration md2 : cparser.getMethods()){
 					if(!md.equals(md2)){
-						System.out.println("test two");
 						JMethod method2 = new JMethod(md2.getName().toString(), "method");
+						getUsedVars(md2,method2);
 						method.addChildNode(method2);
 					}
 				}
@@ -43,6 +42,14 @@ public class JClass extends Graph{
 		for(VariableDeclaration vd : cparser.getVariables()){
 			JAttribute attr = new JAttribute("var", vd.getName().toString().trim());
 			method.addNodeProperty(attr);
+		}
+	}
+	
+	private void getUsedVars(MethodDeclaration md, JMethod method){
+		for(VariableDeclaration vd : cparser.getVariables()){
+			if(md.getBody().toString().contains(vd.getName().toString().trim())){
+				method.addNodeProperty(new JAttribute("var", vd.getName().toString().trim()));
+			}
 		}
 	}
 	
