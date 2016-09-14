@@ -27,7 +27,7 @@ public class JClass extends Graph{
 	
 	private void getNode(){
 		for(MethodDeclaration md : cparser.getMethods()){
-			if(md.getName().toString().equals(className)){
+			if(className.contains(md.getName().toString())){
 				method = new JMethod(md.getName().toString(), "method");
 				for(MethodDeclaration md2 : cparser.getMethods()){
 					if(!md.equals(md2)){
