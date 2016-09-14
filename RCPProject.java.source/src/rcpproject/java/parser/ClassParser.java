@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.bag.SynchronizedBag;
@@ -13,13 +14,15 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 public class ClassParser {
 	
 	private CompilationUnit cu;
 	private MyVisitor visitor;
-	private String filePath;
+	private String filePath; 
+	private String className;
 	
 	
 	public ClassParser(String filePath) throws IOException {
@@ -58,10 +61,18 @@ public class ClassParser {
 		}
 	}
 	
+	public List<MethodDeclaration> getMethods(){
+		return visitor.getMethods();
+	}
+	
 	public void readNames(){
 		for(SimpleName name : visitor.getNames()){
 			System.out.println("NAME : " + name.getIdentifier());
 		}
+	}
+	
+	public List<VariableDeclaration> getVariables(){
+		return visitor.getVariables();
 	}
 	
 	public void readClassName(){
@@ -75,7 +86,11 @@ public class ClassParser {
 	private void parseOutClass(String text){
 		String[] parsedText = text.split("\\{");
 		parsedText = parsedText[0].split("class");
-		System.out.println(parsedText[1].trim());
+		className = parsedText[1].trim();
 	}
+
+	public String getClassName() {
+		return className;
+	}	
 	
 }

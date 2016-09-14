@@ -2,18 +2,48 @@ package rcpproject.java.model;
 
 import java.io.IOException;
 
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.w3c.dom.Node;
+
 import rcpproject.java.parser.ClassParser;
 import rcpproject.model.Graph;
 
 public class JClass extends Graph{
 
+	String className;
+	ClassParser cparser;
+	JMethod method;
+	
 	public JClass(String location) throws IOException {
 		super(location);
-		ClassParser cparser = new ClassParser(location);
+		cparser = new ClassParser(location);
+		className = cparser.getClassName();
+		getNode();
 		/*cparser.readMethods();
 		cparser.readNames();*/
 		// TODO Auto-generated constructor stub
 	}
 	
+	private void getNode(){
+		for(MethodDeclaration md : cparser.getMethods()){
+			if(md.getName().toString().equals(className)){
+				method = new JMethod(md.getName().toString(), "method");
+				System.out.println("test one");
+				for(MethodDeclaration md2 : cparser.getMethods()){
+					if(!md.equals(md2)){
+						System.out.println("test two");
+						JMethod method2 = new JMethod(md2.getName().toString(), "method");
+						method.addChildNode(method2);
+					}
+				}
+			} 
+			nodes.add(method);
+		}
+		for(VariableDeclaration vd : cparser.getVariables()){
+			JAttribute attr = new JAttribute("var", vd.getName().toString().trim());
+			method.addNodeProperty(attr);
+		}
+	}
 	
 }
