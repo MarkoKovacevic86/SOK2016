@@ -19,6 +19,7 @@ import rcpproject.view.SelectionDialog;
 import rcpproject.viewers.IViewer;
 import rcpproject.viewers.ViewerDescription;
 import rcpproject.viewers.ViewerManager;
+import rcpproject.views.BirdView;
 import rcpproject.views.MainView;
 
 public class GraphHandler extends AbstractHandler {
@@ -36,21 +37,18 @@ public class GraphHandler extends AbstractHandler {
 				window.getActivePage();
 				IViewPart view = window.getActivePage().findView("rcpproject.views.mainview");
 				if(graph != null && !root.getLoadedGraphs().containsKey(graph.getLocation())){
-					System.out.println("test jedan");
 					IViewer viewer = getViewerFromViewerDesc("rcpproject.viewer");
 					if(viewer != null && view != null){
-						System.out.println("test dva");
-						System.out.println(graph.getNumberOfNodes());
 						MainView mv = (MainView)view;
 						mv.setContentProvider(viewer.getContentProvider());
 						mv.setLableProvider(viewer.getLabelProvider());
 						mv.setInput(graph);
 						mv.getViewer().refresh();
-					/*	MainView mv2 = new MainView();
-						mv2.setContentProvider(viewer.getContentProvider());
-						mv2.setLableProvider(viewer.getLabelProvider());
-						mv2.setInput(graph);*/
-						
+						IViewPart view2 = window.getActivePage().findView("rcpproject.views.birdview");
+						BirdView bv = (BirdView)view2;
+						bv.setContentProvider(viewer.getContentProvider());
+						bv.setLableProvider(viewer.getLabelProvider());
+						bv.setInput(graph);
 					}
 					root.addGraph(graph);
 				}

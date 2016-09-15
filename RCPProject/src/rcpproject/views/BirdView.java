@@ -1,15 +1,18 @@
 package rcpproject.views;
 
 import org.eclipse.draw2d.SWTEventDispatcher;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.zest.core.viewers.GraphViewer;
+import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
+import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
 
-import rcpproject.model.Graph;
 import rcpproject.viewers.IViewer;
 import rcpproject.viewers.ViewerDescription;
 import rcpproject.viewers.ViewerManager;
@@ -20,6 +23,7 @@ public class BirdView extends ViewPart {
 	
 	private GraphViewer viewer = null;
 	private String visualizerID;
+	private Graph graphOnView;
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -77,6 +81,24 @@ public class BirdView extends ViewPart {
 		ID = iD;
 	}
 	
+	public void setContentProvider(IGraphEntityContentProvider provider){
+		viewer.setContentProvider(provider);
+	}
 	
-
+	public void setLableProvider(LabelProvider provider){
+		viewer.setLabelProvider(provider);
+		viewer.getGraphControl().applyLayout();
+	}
+	
+	public void setInput(Object o){
+		if(o instanceof Graph){
+			graphOnView = (Graph)o;
+		}
+		viewer.setInput(o);
+		viewer.refresh();
+		viewer.getGraphControl().applyLayout();
+		viewer.refresh();
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	}
+	
 }

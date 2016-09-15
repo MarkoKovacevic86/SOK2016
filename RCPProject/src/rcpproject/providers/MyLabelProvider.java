@@ -16,9 +16,9 @@ import rcpproject.model.Property;
 
 public class MyLabelProvider extends LabelProvider {
 	
-	private static final Image GRAPH = getImage("GRAPH.gif");
-	private static final Image PAGE = getImage("PAGE.gif");
-	private static final Image ATTRIBUTE = getImage("ATTRIBUTE.gif");
+	private static final Image GRAPH = getImage("sample.png");
+	private static final Image PAGE = getImage("save_edit.png");
+	private static final Image ATTRIBUTE = getImage("folder.png");
 	
 	public Image getImage(Object element){
 		if(element instanceof Graph){

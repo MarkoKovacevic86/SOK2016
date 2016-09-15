@@ -43,6 +43,12 @@
             name="Bird View"
             restorable="true">
       </view>
+      <view
+            class="rcpproject.views.TreeView"
+            id="rcpproject.views.treeview"
+            name="Tree View"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -59,16 +65,22 @@
          <view
                id="rcpproject.views.mainview"
                minimized="false"
-               ratio="0.7"
+               ratio="0.2"
                relationship="right"
-               relative="rcpproject.views.mainview">
+               relative="rcpproject.views.treeview">
          </view>
          <view
                id="rcpproject.views.birdview"
                minimized="false"
-               ratio="0.3"
+               ratio="0.7"
+               relationship="bottom"
+               relative="rcpproject.views.treeview">
+         </view>
+         <view
+               id="rcpproject.views.treeview"
+               minimized="false"
                relationship="left"
-               relative="rcpproject.views.birdview">
+               relative="org.eclipse.ui.editorss">
          </view>
       </perspectiveExtension>
    </extension>

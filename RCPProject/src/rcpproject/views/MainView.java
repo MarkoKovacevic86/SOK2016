@@ -1,9 +1,13 @@
 package rcpproject.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -24,6 +28,7 @@ import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 import org.eclipse.zest.core.viewers.IZoomableWorkbenchPart;
 import org.eclipse.zest.core.widgets.Graph;
+import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.DirectedGraphLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.GridLayoutAlgorithm;
@@ -218,4 +223,21 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		return viewer;
 	}
 
+	public void searchId(String search){
+		List listOfGraphNodes = viewer.getGraphControl().getNodes();
+		List tempOfGraphNodes = new ArrayList();
+		/*for(Object node : listOfGraphNodes){
+			if(node instanceof GraphNode){
+				GraphNode gnode = ((GraphNode) node);
+				if(gnode.getData() instanceof rcpproject.model.GraphNode){
+					rcpproject.model.GraphNode graphNode = (rcpproject.model.GraphNode)gnode.getData();
+					
+				}
+			}
+		}*/
+		if(!listOfGraphNodes.isEmpty()){
+			StructuredSelection selection = new StructuredSelection();
+		}
+	}
+	
 }
