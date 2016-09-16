@@ -99,26 +99,6 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 			public void modifyText(ModifyEvent e) {
 				// TODO Auto-generated method stub
 				filterGraph(searchText.getText());
-				System.out.println(searchText.getText());
-				System.out.println("hej");
-			}
-		});
-		searchButton = new Button(parent, SWT.NONE);
-		searchButton.setText("Brows");
-		searchButton.addSelectionListener(new SelectionListener() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				SelectionDialog sd = new SelectionDialog(Display.getCurrent().getActiveShell());
-				sd.open();
-
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		GridData gridData = initialiseGridData();
