@@ -25,3 +25,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: rcpproject.model,
  rcpproject.source,
  rcpproject.viewers
+Import-Package: org.apache.commons.lang

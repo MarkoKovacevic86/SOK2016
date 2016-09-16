@@ -3,6 +3,7 @@ package rcpproject.providers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -41,7 +42,9 @@ public class MyTreeContentProvider implements ITreeContentProvider{
 				return graph.getNodes().toArray();
 		}else if(parentElement instanceof GraphNode){
 			GraphNode gn = (GraphNode)parentElement;
-			return gn.getNodeProperties().toArray();
+			Object[] childNodes = gn.getChildNodes().toArray();
+			Object[] properties = gn.getNodeProperties().toArray();
+			return ArrayUtils.addAll(childNodes, properties);
 		}return null;
 	}
 
