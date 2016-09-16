@@ -39,18 +39,26 @@ public class BirdView extends ViewPart {
 
 	}
 	
+	public void setLayoutAlg(){
+		MainView mainView = (MainView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("rcpproject.views.mainview");
+		System.out.println(mainView);
+		this.viewer.setLayoutAlgorithm(mainView.getLayoutAlgorithm());
+		this.viewer.applyLayout();
+	}
+	
 	public void refresh(GraphViewer viewer, String first){
 		if(first != null){
-			MainView mainView = (MainView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MainView.ID);
+			//MainView mainView = (MainView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MainView.ID);
 			if(viewer.getGraphControl().getNodes().size() == 0){
 				return;
 			}
 			IViewer view = getViewerFromViewerDescription(visualizerID);
 			this.viewer.setContentProvider(view.getContentProvider());
 			this.viewer.setLabelProvider(view.getLabelProvider());
-			this.viewer.setLayoutAlgorithm(mainView.getLayoutAlgorithm());
+			/*this.viewer.setLayoutAlgorithm(mainView.getLayoutAlgorithm());
 			//this.viewer.setInput(input);
-			this.viewer.applyLayout();
+			this.viewer.applyLayout();*/
+			setLayoutAlg();
 			this.viewer.getGraphControl().getLightweightSystem().setEventDispatcher(new SWTEventDispatcher(){
 				
 			});
@@ -100,5 +108,11 @@ public class BirdView extends ViewPart {
 		viewer.refresh();
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
+
+	public GraphViewer getViewer() {
+		return viewer;
+	}
+	
+	
 	
 }

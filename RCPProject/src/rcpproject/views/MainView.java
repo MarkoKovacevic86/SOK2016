@@ -11,13 +11,11 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPage;
@@ -28,15 +26,12 @@ import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 import org.eclipse.zest.core.viewers.IZoomableWorkbenchPart;
 import org.eclipse.zest.core.widgets.Graph;
-import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.DirectedGraphLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.GridLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
-
-import rcpproject.view.SelectionDialog;
 
 public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	
@@ -66,10 +61,22 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 			// TODO Auto-generated method stub
 			return title;
 		}
+	
 	}
 	
 	public Layout getLayout(){
 		return layout;
+	}
+	
+	public void setLayout(String layoutText){
+		switch(layoutText){
+		case "Radial": layout = Layout.Radial;
+		case "Tree" : layout = Layout.Tree;
+		case "Grid" : layout = Layout.Grid;
+		case "Spring" : layout = Layout.Spring;
+		case "Directed" : layout = Layout.Directed;
+		}
+		
 	}
 	
 	
@@ -101,6 +108,9 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 				filterGraph(searchText.getText());
 			}
 		});
+		Label layout = new Label(parent, SWT.NONE);
+		layout.setText("Layout:");
+		Combo combo = initialiseLayoutBox(parent);
 		GridData gridData = initialiseGridData();
 		initialiseViewer(parent,gridData);
 		
@@ -165,6 +175,36 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		}return null;
 	}
 	
+	public LayoutAlgorithm getLayoutAlgorithm(String layoutText){
+		switch(layoutText){
+			case "Radial": {
+					layout = Layout.Radial;
+					return new RadialLayoutAlgorithm();
+					}
+			case "Tree":{
+				layout = Layout.Tree;
+				return new TreeLayoutAlgorithm();
+			}
+			case "Grid": {
+				layout = Layout.Grid;
+				return new GridLayoutAlgorithm();
+			}
+			case "Spring": {
+				layout = Layout.Spring;
+				return new SpringLayoutAlgorithm();
+			}
+			case "Directed": {
+				layout = Layout.Directed;
+				return new DirectedGraphLayoutAlgorithm(SWT.NONE);
+			}
+		}return null;
+	}
+	
+	public void setLayoutAlg(String layoutText){
+		viewer.setLayoutAlgorithm(getLayoutAlgorithm(layoutText));
+		viewer.applyLayout();
+	}
+	
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
@@ -218,6 +258,26 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		if(!listOfGraphNodes.isEmpty()){
 			StructuredSelection selection = new StructuredSelection();
 		}
+	}
+	
+	private Combo initialiseLayoutBox(Composite parent){
+		Combo combo = new Combo(parent, SWT.BORDER);
+		String[] layouts = {"Radial", "Tree", "Grid", "Spring", "Directed"	};
+		final String selectedLayout = layouts[0];
+		combo.setItems(layouts);
+		combo.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				// TODO Auto-generated method stub
+				//MainView mainView = (MainView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MainView.ID);
+				setLayoutAlg(combo.getText());
+				BirdView bView = (BirdView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("rcpproject.views.birdview");
+				System.out.println(bView);
+				bView.setLayoutAlg();
+			}
+		});
+		return combo;
 	}
 	
 }
