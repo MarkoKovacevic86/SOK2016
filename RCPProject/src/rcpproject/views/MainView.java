@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.Viewport;
-import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IViewerLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -13,6 +14,9 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -20,7 +24,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -28,7 +32,6 @@ import org.eclipse.zest.core.viewers.AbstractZoomableViewer;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 import org.eclipse.zest.core.viewers.IZoomableWorkbenchPart;
-import org.eclipse.zest.core.viewers.ZoomContributionViewItem;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.DirectedGraphLayoutAlgorithm;
@@ -51,6 +54,11 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	private Viewport viewPort = null;
 	private NodeFilter nfilter;
 	private Combo combo;
+	
+	private Point start = null;
+	private Point previousPoint = null;
+	private Point diff = null;
+	private boolean scrollStarted  = false;
 	
 	
 	public enum Layout{
@@ -150,6 +158,68 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 			@Override
 			public void selectionChanged(SelectionChangedEvent arg0) {
 				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		viewer.getControl().addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				// TODO Auto-generated method stub
+				scrollStarted = false;
+				start = null;
+				previousPoint = null;
+				if(viewer.getGraphControl().getDragDetect() && !viewer.getSelection().isEmpty()){
+					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					bView.refresh(viewer, null);
+				}
+				
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				if(e.button == 1 && viewer.getSelection().isEmpty()){
+					if(start == null){
+						start = new Point();
+						start.x = e.x;
+						start.y = e.y;
+					}scrollStarted = true;
+				}
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		viewer.getControl().addMouseMoveListener(new MouseMoveListener() {
+			
+			@Override
+			public void mouseMove(MouseEvent e) {
+				// TODO Auto-generated method stub
+				if(scrollStarted == true){
+					Point position = new Point();
+					position.x = e.x;
+					position.y = e.y;
+					if(previousPoint == null){
+						diff = new Point();
+						previousPoint = new Point();
+						previousPoint.x = position.x;
+						previousPoint.y = position.y;
+						diff.x = start.x - position.x;
+						diff.y = start.y - position.y;
+					}else{
+						diff.x = previousPoint.x - position.x;
+						diff.y = previousPoint.y - position.y;
+						previousPoint.x = position.x;
+						previousPoint.y = position.y;
+					}viewPort.setViewLocation(viewPort.getLocation().x + diff.x, viewPort.getLocation().y + diff.y);
+					
+				}
 				
 			}
 		});
