@@ -2,6 +2,7 @@ package rcpproject.views;
 
 import org.eclipse.draw2d.SWTEventDispatcher;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPage;
@@ -13,6 +14,7 @@ import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
 
+import rcpproject.controls.NodeFilter;
 import rcpproject.viewers.IViewer;
 import rcpproject.viewers.ViewerDescription;
 import rcpproject.viewers.ViewerManager;
@@ -24,12 +26,14 @@ public class BirdView extends ViewPart {
 	private GraphViewer viewer = null;
 	private String visualizerID;
 	private Graph graphOnView;
+	private NodeFilter filter;
 	
 	@Override
 	public void createPartControl(Composite parent) {
 		// TODO Auto-generated method stub
 		this.viewer = new GraphViewer(parent, SWT.BORDER);
 		this.viewer.setLayoutAlgorithm(new RadialLayoutAlgorithm());
+		setFilters();
 		
 	}
 
@@ -40,24 +44,22 @@ public class BirdView extends ViewPart {
 	}
 	
 	public void setLayoutAlg(){
-		MainView mainView = (MainView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("rcpproject.views.mainview");
-		System.out.println(mainView);
+		MainView mainView = (MainView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().
+				findView("rcpproject.views.mainview");
 		this.viewer.setLayoutAlgorithm(mainView.getLayoutAlgorithm());
 		this.viewer.applyLayout();
+		
 	}
 	
 	public void refresh(GraphViewer viewer, String first){
 		if(first != null){
-			//MainView mainView = (MainView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MainView.ID);
 			if(viewer.getGraphControl().getNodes().size() == 0){
 				return;
 			}
 			IViewer view = getViewerFromViewerDescription(visualizerID);
 			this.viewer.setContentProvider(view.getContentProvider());
 			this.viewer.setLabelProvider(view.getLabelProvider());
-			/*this.viewer.setLayoutAlgorithm(mainView.getLayoutAlgorithm());
-			//this.viewer.setInput(input);
-			this.viewer.applyLayout();*/
+
 			setLayoutAlg();
 			this.viewer.getGraphControl().getLightweightSystem().setEventDispatcher(new SWTEventDispatcher(){
 				
@@ -87,6 +89,19 @@ public class BirdView extends ViewPart {
 
 	public static void setID(String iD) {
 		ID = iD;
+	}
+	
+	private void setFilters(){
+		filter = new NodeFilter();
+		ViewerFilter[] filters = new ViewerFilter[1];
+		filters[0] = filter;
+		viewer.setFilters(filters);
+	}
+	
+	public void filterGraph(String filterWord){
+		filter.setFilterWord(filterWord);
+		viewer.refresh();
+		setLayoutAlg();
 	}
 	
 	public void setContentProvider(IGraphEntityContentProvider provider){

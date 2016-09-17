@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.Viewport;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -18,6 +20,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -25,6 +28,7 @@ import org.eclipse.zest.core.viewers.AbstractZoomableViewer;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 import org.eclipse.zest.core.viewers.IZoomableWorkbenchPart;
+import org.eclipse.zest.core.viewers.ZoomContributionViewItem;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.DirectedGraphLayoutAlgorithm;
@@ -32,6 +36,8 @@ import org.eclipse.zest.layouts.algorithms.GridLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
+
+import rcpproject.controls.NodeFilter;
 
 public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	
@@ -43,7 +49,10 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	
 	private Layout layout = Layout.Radial;
 	private Viewport viewPort = null;
-
+	private NodeFilter nfilter;
+	private Combo combo;
+	
+	
 	public enum Layout{
 		Radial("Radial"),
 		Tree("Tree"),
@@ -106,6 +115,7 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 			public void modifyText(ModifyEvent e) {
 				// TODO Auto-generated method stub
 				filterGraph(searchText.getText());
+				
 			}
 		});
 		Label layout = new Label(parent, SWT.NONE);
@@ -131,17 +141,10 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		viewer = new GraphViewer(parent, SWT.NONE);
 		
 		viewPort = viewer.getGraphControl().getViewport();
-		//viewPort.setSize(new Dimension(500,500));
 		viewer.getGraphControl().setLayoutData(gridData);
-		
-		
-	/*	viewer.setContentProvider(new MyContentProvider());
-		viewer.setLabelProvider(new MyLabelProvider());
-		TestDataProvider tdp = new TestDataProvider();
-	//	viewer.setInput(tdp.getNodes());
-		viewer.refresh();*/
 		viewer.setLayoutAlgorithm(new RadialLayoutAlgorithm());
 		viewer.applyLayout();
+		setFilters();
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			
 			@Override
@@ -154,15 +157,19 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	}
 	
 	private void setFilters(){
-	//	nfilter = new NodeFilter();
-	//	ViewerFilter[] filters = new ViewerFilter[1];
-	//	filters[0] = nfilter;
-	//	viewer.setFilters(filters);
+		nfilter = new NodeFilter();
+		ViewerFilter[] filters = new ViewerFilter[1];
+		filters[0] = nfilter;
+		viewer.setFilters(filters);
 	}
 	
 	public void filterGraph(String filterWord){
-	//	nfilter.setFilterWord(filterWord);
+		nfilter.setFilterWord(filterWord);
+		setLayoutAlg(combo.getText());
 		viewer.refresh();
+		System.out.println(bView.toString());
+//		System.out.println(searchText.getText());
+		bView.filterGraph(filterWord);
 	}
 	
 	public LayoutAlgorithm getLayoutAlgorithm(){
@@ -178,9 +185,9 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	public LayoutAlgorithm getLayoutAlgorithm(String layoutText){
 		switch(layoutText){
 			case "Radial": {
-					layout = Layout.Radial;
-					return new RadialLayoutAlgorithm();
-					}
+				layout = Layout.Radial;
+				return new RadialLayoutAlgorithm();
+			}
 			case "Tree":{
 				layout = Layout.Tree;
 				return new TreeLayoutAlgorithm();
@@ -196,6 +203,9 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 			case "Directed": {
 				layout = Layout.Directed;
 				return new DirectedGraphLayoutAlgorithm(SWT.NONE);
+			}case "":{
+				layout = Layout.Radial;
+				return new RadialLayoutAlgorithm();
 			}
 		}return null;
 	}
@@ -260,8 +270,11 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		}
 	}
 	
+	BirdView bView = (BirdView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().
+	findView("rcpproject.views.birdview");; 
+	
 	private Combo initialiseLayoutBox(Composite parent){
-		Combo combo = new Combo(parent, SWT.BORDER);
+		combo = new Combo(parent, SWT.BORDER);
 		String[] layouts = {"Radial", "Tree", "Grid", "Spring", "Directed"	};
 		final String selectedLayout = layouts[0];
 		combo.setItems(layouts);
@@ -270,14 +283,16 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 			@Override
 			public void modifyText(ModifyEvent e) {
 				// TODO Auto-generated method stub
-				//MainView mainView = (MainView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MainView.ID);
 				setLayoutAlg(combo.getText());
-				BirdView bView = (BirdView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("rcpproject.views.birdview");
-				System.out.println(bView);
+				
 				bView.setLayoutAlg();
 			}
 		});
 		return combo;
+	}
+
+	public Text getSearchText() {
+		return searchText;
 	}
 	
 }
