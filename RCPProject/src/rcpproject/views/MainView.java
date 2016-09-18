@@ -212,12 +212,13 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 						previousPoint.y = position.y;
 						diff.x = start.x - position.x;
 						diff.y = start.y - position.y;
+						System.out.println(diff.x);
 					}else{
 						diff.x = previousPoint.x - position.x;
 						diff.y = previousPoint.y - position.y;
 						previousPoint.x = position.x;
 						previousPoint.y = position.y;
-					}viewPort.setViewLocation(viewPort.getLocation().x + diff.x, viewPort.getLocation().y + diff.y);
+					}viewPort.setViewLocation(viewPort.getViewLocation().x + diff.x, viewPort.getViewLocation().y + diff.y);
 					
 				}
 				
