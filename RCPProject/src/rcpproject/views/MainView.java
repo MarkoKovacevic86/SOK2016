@@ -103,7 +103,7 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		viewer = new GraphViewer(parent, SWT.BORDER);
+		//viewer = new GraphViewer(parent, SWT.BORDER);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		parent.setLayout(layout);
@@ -111,10 +111,11 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	}
 	
 	private void setupComponents(Composite parent){
-		Label filter = new Label(parent, SWT.NONE);
-		filter.setText("Filter:");
+		/*Label filter = new Label(parent, SWT.NONE);
+		filter.setText("Filter:");*/
 		
 		Text searchText = new Text(parent, SWT.BORDER);
+		searchText.setMessage("Filter");
 		GridData stgd = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
 		searchText.setLayoutData(stgd);
 		searchText.addModifyListener(new ModifyListener() {
@@ -324,23 +325,6 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		return viewer;
 	}
 
-	public void searchId(String search){
-		List listOfGraphNodes = viewer.getGraphControl().getNodes();
-		List tempOfGraphNodes = new ArrayList();
-		/*for(Object node : listOfGraphNodes){
-			if(node instanceof GraphNode){
-				GraphNode gnode = ((GraphNode) node);
-				if(gnode.getData() instanceof rcpproject.model.GraphNode){
-					rcpproject.model.GraphNode graphNode = (rcpproject.model.GraphNode)gnode.getData();
-					
-				}
-			}
-		}*/
-		if(!listOfGraphNodes.isEmpty()){
-			StructuredSelection selection = new StructuredSelection();
-		}
-	}
-	
 	BirdView bView = (BirdView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().
 	findView("rcpproject.views.birdview");; 
 	
