@@ -1,15 +1,12 @@
 package rcpproject.views;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IViewerLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -17,6 +14,10 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseWheelListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -24,7 +25,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -32,6 +32,7 @@ import org.eclipse.zest.core.viewers.AbstractZoomableViewer;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 import org.eclipse.zest.core.viewers.IZoomableWorkbenchPart;
+import org.eclipse.zest.core.viewers.internal.ZoomManager;
 import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.DirectedGraphLayoutAlgorithm;
@@ -54,12 +55,13 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	private Viewport viewPort = null;
 	private NodeFilter nfilter;
 	private Combo combo;
+	private Combo zoomCombo;
 	
 	private Point start = null;
 	private Point previousPoint = null;
 	private Point diff = null;
 	private boolean scrollStarted  = false;
-	
+	private ZoomManager zm ;
 	
 	public enum Layout{
 		Radial("Radial"),
@@ -103,17 +105,13 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		//viewer = new GraphViewer(parent, SWT.BORDER);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 3;
+		layout.numColumns = 5;
 		parent.setLayout(layout);
 		setupComponents(parent);
 	}
 	
 	private void setupComponents(Composite parent){
-		/*Label filter = new Label(parent, SWT.NONE);
-		filter.setText("Filter:");*/
-		
 		Text searchText = new Text(parent, SWT.BORDER);
 		searchText.setMessage("Filter");
 		GridData stgd = new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL);
@@ -130,6 +128,7 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		Label layout = new Label(parent, SWT.NONE);
 		layout.setText("Layout:");
 		Combo combo = initialiseLayoutBox(parent);
+		initialiseZoomBox(parent);
 		GridData gridData = initialiseGridData();
 		initialiseViewer(parent,gridData);
 		
@@ -138,7 +137,7 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 	private GridData initialiseGridData(){
 		GridData gridData = new GridData(); 
 		gridData.verticalAlignment = GridData.FILL;
-		gridData.horizontalSpan = 3;
+		gridData.horizontalSpan = 5;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalAlignment = GridData.FILL;
@@ -153,16 +152,13 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		viewer.getGraphControl().setLayoutData(gridData);
 		viewer.setLayoutAlgorithm(new RadialLayoutAlgorithm());
 		viewer.applyLayout();
-		setFilters();
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			
-			@Override
-			public void selectionChanged(SelectionChangedEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
+		setFilters();	
+		initializeMouseClick(viewer);
+		initializeMove(viewer);
+		initializeZoom(viewer);
+	}
+	
+	private void initializeMouseClick(GraphViewer viewer){
 		viewer.getControl().addMouseListener(new MouseListener() {
 			
 			@Override
@@ -196,7 +192,10 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 				
 			}
 		});
-		
+	
+	}
+	
+	private void initializeMove(GraphViewer viewer){
 		viewer.getControl().addMouseMoveListener(new MouseMoveListener() {
 			
 			@Override
@@ -225,7 +224,29 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 				
 			}
 		});
+	}
 	
+	private void initializeZoom(GraphViewer viewer){
+		viewer.getControl().addMouseWheelListener(new MouseWheelListener() {
+			@Override
+			public void mouseScrolled(MouseEvent e) {
+				// TODO Auto-generated method stub
+				if(viewer.getGraphControl().getGraph() != null){
+					if (( e.stateMask & SWT.CTRL ) == 0)
+	                    return;                
+	                if (e.count < 0) {
+	                    zm.zoomOut();
+	                } else if (e.count > 0) {
+	                    zm.zoomIn();
+	                }
+				}
+			}
+		});
+	}
+	
+	private void initZoom(){
+		Graph graph = viewer.getGraphControl().getGraph();
+		zm = new ZoomManager(graph.getRootLayer(), graph.getViewport());		
 	}
 	
 	private void setFilters(){
@@ -239,8 +260,6 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		nfilter.setFilterWord(filterWord);
 		setLayoutAlg(combo.getText());
 		viewer.refresh();
-		System.out.println(bView.toString());
-//		System.out.println(searchText.getText());
 		bView.filterGraph(filterWord);
 	}
 	
@@ -318,6 +337,7 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		viewer.getGraphControl().applyLayout();
 		viewer.refresh();
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		initZoom();
 	}
 
 
@@ -345,7 +365,45 @@ public class MainView extends ViewPart implements IZoomableWorkbenchPart{
 		});
 		return combo;
 	}
-
+	
+	private void initialiseZoomBox(Composite parent){
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(2, true));
+		Button zoomIn = new Button(composite, SWT.NONE);
+		zoomIn.setText("+");
+		initialiseZoomListener(zoomIn);
+		Button zoomOut = new Button(composite, SWT.NONE);
+		zoomOut.setText("-");
+		composite.pack();
+		
+		initialiseZoomListener(zoomOut);
+		
+	}
+	
+	private void initialiseZoomListener(Button button){
+		button.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				if(button.getText().equals("+")){
+					zm.zoomIn();
+				}else if (button.getText().equals("-")){
+					zm.zoomOut();
+				}else
+					return;
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+	
+	
+	
 	public Text getSearchText() {
 		return searchText;
 	}
